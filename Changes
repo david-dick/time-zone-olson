@@ -1,0 +1,112 @@
+Revision history for Time-Zone-Olson
+
+0.37   Sat Aug 07 10:42:00 2020
+       Importing into github
+
+0.36   Fri Nov 27 20:51:00 2020
+       Fixed tests to allow for old WinXP environments and Unix environments where there is no default timezone
+
+0.35   Wed Nov 25 20:20:00 2020
+       Fixed tests to correctly identify platforms without transition times
+
+0.34   Tue Nov 24 06:43:00 2020
+       Add Yukon Standard Time to Win32 exceptions and allow UTC and GMT in Win32 comments
+
+0.33   Mon Nov 23 21:31:00 2020
+       Allow Solaris to not make Hobart and Melbourne equivalent
+
+0.32   Sun Nov 22 21:24:00 2020
+       Fixing bug with ttisgmtcnt in tz parsing
+
+0.31   Thu Dec 05 19:26:00 2019
+       Allowing older perls to have alternatives for modern unpack capabilities.
+
+0.30   Sat Nov 30 07:50:00 2019
+       Fixing modern regexs to work with old perl versions.
+
+0.29   Tue Nov 26 06:58:00 2019
+       Dropping minimum perl requirements.  Adding support for old perl regexs.  Accepting that Display in Win32 can be in a different language.
+
+0.28   Sun Nov 10 21:29:00 2019
+       Increased the requirements for Win32::API in the test suite to address CPAN Tester issues.
+
+0.27   Sat Nov 09 21:19:00 2019
+       Fixes for TZ environment variable formats such as 'AEST-10AEDT,M10.1.0,M4.1.0/3'.  Thanks to SREZIC for the bug report. RT#130880
+
+0.26   Wed Jun 12 06:29:00 2019
+       Windows XP fixes for guessing timezone.
+
+0.25   Tue Jun 11 19:53:00 2019
+       Fixing Win32 encoding.  Clearing old cached timezone values after a timezone is changed.
+
+0.24   Fri Jun 07 19:58:00 2019
+       Adding cygwin, dragonfly support.
+
+0.23   Thu Jun 06 21:15:00 2019
+       Improving Win32 registry accesses.
+
+0.22   Wed Jun 05 21:15:00 2019
+       Adding determining_path method.
+
+0.21   Tue Jun 04 21:10:00 2019
+       Untainting TZ environment variable. Cleanups.
+
+0.20   Tue Jun 04 19:48:00 2019
+       Improving the guess ability for older debians and freebsd.  Allowing tz specifications with just a location, such as 'UTC'.
+
+0.19   Mon Jun 03 17:26:00 2019
+       Incorporating the ability to guess TZ from the environment if a tz parameter is not found.
+
+0.18   Tue May 28 20:24:00 2019
+       More tz rule and Solaris fixes.
+
+0.17   Mon May 27 18:02:00 2019
+       Fine tuning tz rule interpretation for the southern hemisphere.
+
+0.16   Mon May 27 06:47:00 2019
+       Fixing zone1970.tab support for older Olson databases.
+
+0.15    Sun May 26 21:04:00 2019
+       Improving support for Solaris and Win32.
+
+0.14    Tue May 21 18:37:00 2019
+       Added support for Solaris.  Merging of preliminary Win32 code into the main module.
+
+0.13    Mon May 20 18:37:00 2019
+       Preliminary support for Win32.  Coping with TZ environment variables such as 'AEST-10AEDT,M10.1.0,M4.1.0/3'.  Changed signature of new method.
+
+0.12    Wed Sep 21 22:48:00 2016
+       Coping with TZ rules such as <GMT+10>+10 for 'Etc/GMT+10'.  Thanks to COFFEE for the bug report. RT#118011
+
+0.11    Sat Apr 16 13:42:00 2016
+       Trying to cope with unexpected system 'date' behaviour from njh tests on CPAN testers.
+
+0.10    Wed Apr 13 20:39:00 2016
+       Coping with a new TZ rule of '<+07>-7' for 'Asia/Barnaul'.  Thanks to SREZIC for the bug report. RT#113732
+
+0.09    Thu Apr 02 20:23:00 2015
+       Catching Time::Local exceptions in test suite, added the equiv method
+
+0.08    Fri Mar 27 21:18:00 2015
+       Corrected dst -> std time bug, added Time::Local testing
+
+0.07    Fri Mar 06 17:45:00 2015
+       Added the offset calculation and override methods
+
+0.06    Wed Mar 04 19:57:00 2015
+       Added a class level cache and the reset_cache method 
+
+0.05    Tue Mar 03 20:47:00 2015
+       Removed un-used code.  Tests now attempt to detect local timezones from /etc/localtime
+
+0.04    Mon Mar 02 21:28:00 2015
+       Corrected timezone parsing bug
+
+0.03    Sun Mar 01 20:25:00 2015
+       Adjustments/extra debugging for BSD installations
+
+0.02    Sat Feb 28 17:53:00 2015
+       Namespace correction.  Test suite fixes for locale and missing gnu date.  Thanks to DROLSKY and SREZIC.
+
+0.01    Fri Feb 27 16:56:00 2015
+       Initial release.
