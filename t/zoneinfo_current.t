@@ -21,10 +21,14 @@ ok($timezone, "Time::Zone::Olson->new() generates an object");
 
 if ($timezone->location()) {
 	$ENV{TZ} = $timezone->area() . '/' . $timezone->location();
-} else {
+} elsif ($timezone->area()) {
 	$ENV{TZ} = $timezone->area();
 }
-diag("Determined timezone is $ENV{TZ}");
+if (defined $ENV{TZ}) {
+	diag("Determined timezone is $ENV{TZ}");
+} else {
+	diag("Timezone did not parse into area/location:" . $timezone->timezone());
+}
 
 my $perl_date = 0;
 my $bsd_date = 0;
