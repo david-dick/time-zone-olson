@@ -71,6 +71,11 @@ diag("Comment for 'Australia/Melbourne' is '$comment'");
 }
 my $tz = $timezone->timezone();
 my $directory = $timezone->directory();
+if ($ENV{TZDIR}) {
+	if ($directory =~ /^(.*)$/) {
+		$directory = $1;
+	}
+}
 if (($^O eq 'MSWin32') || ($^O eq 'cygwin')) {
 } elsif ($^O eq 'solaris') {
 	diag(`zdump -v $tz | head -n 10`);

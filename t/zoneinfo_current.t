@@ -29,6 +29,11 @@ if (defined $ENV{TZ}) {
 } else {
 	diag("Timezone did not parse into area/location:" . $timezone->timezone());
 }
+if (defined $ENV{TZDIR}) {
+	diag("TZDIR has been set to $ENV{TZDIR}");
+} else {
+	diag("TZDIR has not been set");
+}
 
 my $perl_date = 0;
 my $bsd_date = 0;
