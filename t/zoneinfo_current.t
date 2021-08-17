@@ -73,6 +73,7 @@ if (!$timezone->timezone()) {
 	$timezone->timezone('UTC');
 	diag("$^O does not have a default timezone, setting to " . $timezone->timezone());
 }
+diag("Local timezone has been determined to be " . $timezone->timezone() );
 ok($timezone->timezone() =~ /^\w+(?:\/[\w\-\/]+)?$/, "\$timezone->timezone() parses correctly");
 if ($timezone->location()) {
 	ok($timezone->area() . '/' . $timezone->location() eq $timezone->timezone(), "\$timezone->area() and \$timezone->location() contain the area and location of the current timezone");
@@ -95,8 +96,10 @@ foreach my $index (0 .. (( scalar @correct_localtime )- 1)) {
 	if ($correct_localtime[$index] eq $test_localtime[$index]) {
 	} else {
 		diag("Missed wantarray location (1) test for $^O on index $index ('$correct_localtime[$index]' eq '$test_localtime[$index]')");
+		diag("Seconds since UNIX epoch is:$now");
 		diag("Time::Zone::Olson produces:" . join ', ', @test_localtime);
 		diag("perl localtime produces   :" . join ', ', @correct_localtime);
+		diag(`ls -la /etc/localtime`);
 		$matched = 0;
 	}
 }
@@ -104,8 +107,10 @@ foreach my $index (0 .. (( scalar @test_localtime )- 1)) {
 	if ($correct_localtime[$index] eq $test_localtime[$index]) {
 	} else {
 		diag("Missed wantarray location (2) test for $^O on index $index ('$correct_localtime[$index]' eq '$test_localtime[$index]')");
+		diag("Seconds since UNIX epoch is:$now");
 		diag("Time::Zone::Olson produces:" . join ', ', @test_localtime);
 		diag("perl localtime produces   :" . join ', ', @correct_localtime);
+		diag(`ls -la /etc/localtime`);
 		$matched = 0;
 	}
 }
