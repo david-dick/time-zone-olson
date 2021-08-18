@@ -76,11 +76,14 @@ if ($ENV{TZDIR}) {
 		$directory = $1;
 	}
 }
+my $current_year = (localtime)[5] + 1900;
+my $start_year = $current_year - 3;
+my $end_year = $current_year + 2;
 if (($^O eq 'MSWin32') || ($^O eq 'cygwin')) {
 } elsif ($^O eq 'solaris') {
-	diag(`zdump -v $tz | head -n 10`);
+	diag(`zdump -c $start_year,$end_year -v $tz | tail`);
 } else {
-	diag(`zdump -v $directory/$tz | head -n 10`);
+	diag(`zdump -c $start_year,$end_year -v $directory/$tz | tail`);
 }
 my $todo;
 if ($^O eq 'MSWin32') {
