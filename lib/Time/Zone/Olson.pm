@@ -2353,7 +2353,7 @@ sub _read_transition_times {
               $buffer;
         };
     }
-    return \@transition_times;
+    return [ sort { $a <=> $b } @transition_times ];
 }
 
 sub _read_local_time_indexes {
