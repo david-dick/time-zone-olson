@@ -107,20 +107,16 @@ foreach my $index (0 .. (( scalar @test_localtime )- 1)) {
 	}
 }
 
-TODO: {
-	local $TODO = $^O eq 'solaris' ? "perl may have issues with localtime on solaris" : undef;
-	ok($matched, "Matched wantarray localtime");
-	if (!$matched) {
-		local $TODO = undef;
-		diag("Seconds since UNIX epoch is:$now");
-		diag("Time::Zone::Olson produces:" . join ', ', @test_localtime);
-		diag("perl localtime produces   :" . join ', ', @correct_localtime);
-		diag(`ls -la /etc/localtime`);
-		my $current_timezone = $timezone->timezone();
-		my $directory = $timezone->directory();
-		diag("Permissions of $directory/$current_timezone is " . `ls -la $directory/$current_timezone`);
-		diag("Content of $directory/$current_timezone is " . `cat $directory/$current_timezone | base64`);
-	}
+ok($matched, "Matched wantarray localtime");
+if (!$matched) {
+	diag("Seconds since UNIX epoch is:$now");
+	diag("Time::Zone::Olson produces:" . join ', ', @test_localtime);
+	diag("perl localtime produces   :" . join ', ', @correct_localtime);
+	diag(`ls -la /etc/localtime`);
+	my $current_timezone = $timezone->timezone();
+	my $directory = $timezone->directory();
+	diag("Permissions of $directory/$current_timezone is " . `ls -la $directory/$current_timezone`);
+	diag("Content of $directory/$current_timezone is " . `cat $directory/$current_timezone | base64`);
 }
 
 my $melbourne_offset;
