@@ -128,7 +128,7 @@ This method will return true if the object is using the Windows registry for Ols
 
     The designated file is shorter than expected
 
-- `%s is not an time zone in the existing Olson database`
+- `%s is not a time zone in the existing Olson database`
 
     The designated time zone could not be found on the file system.  The time zone is expected to be in the designated directory + the time zone name, for example, /usr/share/zoneinfo/Australia/Melbourne
 

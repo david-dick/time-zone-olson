@@ -201,7 +201,7 @@ DIAGNOSTICS
 
       The designated file is shorter than expected
 
-    %s is not an time zone in the existing Olson database
+    %s is not a time zone in the existing Olson database
 
       The designated time zone could not be found on the file system. The
       time zone is expected to be in the designated directory + the time

@@ -961,7 +961,7 @@ sub timezone {
                 my %mapping = $self->win32_mapping();
                 if ( !defined $mapping{$new} ) {
                     Carp::croak(
-"'$new' is not an time zone in the existing Win32 registry"
+"'$new' is not a time zone in the existing Win32 registry"
                     );
                 }
             }
@@ -976,7 +976,7 @@ sub timezone {
                   File::Spec->catfile( $self->directory(), @directories );
                 if ( !-f $path ) {
                     Carp::croak(
-"'$new' is not an time zone in the existing Olson database"
+"'$new' is not a time zone in the existing Olson database"
                     );
                 }
             }
@@ -3354,7 +3354,7 @@ The designated file encountered an error reading either the version 1 or version
 
 The designated file is shorter than expected
 
-=item C<< %s is not an time zone in the existing Olson database >>
+=item C<< %s is not a time zone in the existing Olson database >>
 
 The designated time zone could not be found on the file system.  The time zone is expected to be in the designated directory + the time zone name, for example, /usr/share/zoneinfo/Australia/Melbourne
 
