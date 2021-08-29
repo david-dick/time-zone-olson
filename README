@@ -212,6 +212,12 @@ DIAGNOSTICS
       The designated time zone name could not be matched by the regular
       expression for a time zone in Time::Zone::Olson
 
+    There are two transition times for %s in %s, which cannot be coped with
+    at the moment. Please file a bug with Time::Zone::Olson
+
+      The transition times are sorted to handle unsorted (on disk)
+      transition times which has been found on solaris. Please file a bug.
+
     Failed to close %s:%s
 
       There has been a file system error while reading or closing the

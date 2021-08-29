@@ -2354,7 +2354,7 @@ sub _read_transition_times {
               $buffer;
         };
     }
-    return [ sort { $a <=> $b } @transition_times ];
+    return \@transition_times;
 }
 
 sub _read_local_time_indexes {
@@ -2825,6 +2825,36 @@ sub _set_abbrs {
     return;
 }
 
+sub _sort_transition_times {
+    my ( $self, $tz ) = @_;
+    my @sorted_transition_times =
+      sort { $a <=> $b } @{ $self->{_tzdata}->{$tz}->{transition_times} };
+    my %transition_time_original_indexes;
+    my $count = 0;
+    foreach my $time ( @{ $self->{_tzdata}->{$tz}->{transition_times} } ) {
+        if ( defined $transition_time_original_indexes{$time} ) {
+            Carp::croak(
+"There are two transition times for $time in $tz, which cannot be coped with at the moment.  Please file a bug with Time::Zone::Olson"
+            );
+        }
+        else {
+            $transition_time_original_indexes{$time} = $count;
+        }
+        $count += 1;
+    }
+    my @sorted_local_time_indexes;
+    $count = 0;
+    foreach my $time (@sorted_transition_times) {
+        push @sorted_local_time_indexes,
+          $self->{_tzdata}->{$tz}->{local_time_indexes}
+          ->[ $transition_time_original_indexes{$time} ];
+        $count += 1;
+    }
+    $self->{_tzdata}->{$tz}->{transition_times}   = \@sorted_transition_times;
+    $self->{_tzdata}->{$tz}->{local_time_indexes} = \@sorted_local_time_indexes;
+    return;
+}
+
 sub _read_v1_tzfile {
     my ( $self, $handle, $path, $header, $tz ) = @_;
     $self->{_tzdata}->{$tz}->{transition_times} =
@@ -2834,6 +2864,7 @@ sub _read_v1_tzfile {
       $self->_read_local_time_indexes( $handle, $path, $header->{timecnt} );
     $self->{_tzdata}->{$tz}->{local_time_types} =
       $self->_read_local_time_types( $handle, $path, $header->{typecnt} );
+    $self->_sort_transition_times($tz);
     $self->{_tzdata}->{$tz}->{time_zone_abbreviation_strings} =
       $self->_read_time_zone_abbreviation_strings( $handle, $path,
         $header->{charcnt} );
@@ -2863,6 +2894,7 @@ sub _read_v2_tzfile {
             _SIZE_OF_TRANSITION_TIME_V2() );
         $self->{_tzdata}->{$tz}->{local_time_indexes} =
           $self->_read_local_time_indexes( $handle, $path, $header->{timecnt} );
+        $self->_sort_transition_times($tz);
         $self->{_tzdata}->{$tz}->{local_time_types} =
           $self->_read_local_time_types( $handle, $path, $header->{typecnt} );
         $self->{_tzdata}->{$tz}->{time_zone_abbreviation_strings} =
@@ -3362,6 +3394,10 @@ The designated time zone could not be found on the file system.  The time zone i
 =item C<< %s does not have a valid format for a TZ time zone >>
 
 The designated time zone name could not be matched by the regular expression for a time zone in Time::Zone::Olson
+
+=item C<< There are two transition times for %s in %s, which cannot be coped with at the moment.  Please file a bug with Time::Zone::Olson >>
+
+The transition times are sorted to handle unsorted (on disk) transition times which has been found on solaris.  Please file a bug.
 
 =item C<< Failed to close %s:%s >>
 
