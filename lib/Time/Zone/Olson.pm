@@ -617,6 +617,9 @@ sub new {
             }
             else {
                 $env_tz = $ENV{TZ};
+                if ( !$params{timezone} ) {
+                    $self->{_determined_env} = 1;
+                }
             }
         }
         if ( ( defined $params{timezone} ) || ( defined $env_tz ) ) {
@@ -1022,7 +1025,9 @@ sub _guess_tz {
 
 sub determining_path {
     my ($self) = @_;
-    if ( !defined $self->{determining_path} ) {
+    if ( $self->{_determined_env} ) {
+    }
+    elsif ( !defined $self->{determining_path} ) {
         $self->_guess_tz();
     }
     return $self->{determining_path};
