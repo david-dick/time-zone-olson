@@ -76,6 +76,10 @@ This method will return the location component of the current time zone, such as
 
 This method takes the same arguments as `localtime` but returns the appropriate offset from GMT in minutes.  This can to used as a `offset` parameter to a subsequent call to Time::Zone::Olson.
 
+## abbr
+
+This method takes the same arguments as `localtime` but returns the appropriate abbreviation for the timezone such as AEST or AEDT.  This is the same result as from a `date +%Z` command.
+
 ## local\_time
 
 This method has the same signature as the 64 bit version of the `localtime` function.  That is, it accepts up to a 64 bit signed integer as the sole argument and returns the `(seconds, minutes, hours, day, month, year, wday, yday, isdst)` definition for the time zone for the object.  The time zone used to calculate the local time may be specified as a parameter to the ["new"](#new) method or via the ["timezone"](#timezone) method.

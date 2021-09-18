@@ -2285,6 +2285,17 @@ sub local_time {
     }
 }
 
+sub abbr {
+    my ( $self, $time ) = @_;
+    if ( !defined $time ) {
+        $time = time;
+    }
+
+    my ( $isdst, $gmtoff, $abbr ) =
+      $self->_get_isdst_gmtoff_abbr_calculating_for_local_time($time);
+    return $abbr;
+}
+
 sub transition_times {
     my ($self) = @_;
     my $tz = $self->timezone();
@@ -2808,24 +2819,13 @@ sub _initialise_undefined_tz_definition_values {
 
 sub _set_abbrs {
     my ( $self, $tz ) = @_;
-    my $index = 0;
     foreach
       my $local_time_type ( @{ $self->{_tzdata}->{$tz}->{local_time_types} } )
     {
-        if ( $self->{_tzdata}->{$tz}->{local_time_types}->[ $index + 1 ] ) {
-            $local_time_type->{abbr} =
-              substr $self->{_tzdata}->{$tz}->{time_zone_abbreviation_strings},
-              $local_time_type->{abbrind},
-              $self->{_tzdata}->{$tz}->{local_time_types}->[ $index + 1 ]
-              ->{abbrind};
-        }
-        else {
-            $local_time_type->{abbr} =
-              substr $self->{_tzdata}->{$tz}->{time_zone_abbreviation_strings},
-              $local_time_type->{abbrind};
-        }
-        $local_time_type->{abbr} =~ s/\0+$//smx;
-        $index += 1;
+        $local_time_type->{abbr} =
+          substr $self->{_tzdata}->{$tz}->{time_zone_abbreviation_strings},
+          $local_time_type->{abbrind};
+        $local_time_type->{abbr} =~ s/\0.*$//smx;
     }
     return;
 }
@@ -3337,6 +3337,10 @@ This method will return the location component of the current time zone, such as
 =head2 local_offset
 
 This method takes the same arguments as C<localtime> but returns the appropriate offset from GMT in minutes.  This can to used as a C<offset> parameter to a subsequent call to Time::Zone::Olson.
+
+=head2 abbr
+
+This method takes the same arguments as C<localtime> but returns the appropriate abbreviation for the timezone such as AEST or AEDT.  This is the same result as from a C<date +%Z> command.
 
 =head2 local_time
 

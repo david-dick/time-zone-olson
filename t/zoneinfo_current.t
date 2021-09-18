@@ -135,7 +135,7 @@ DATE: {
 				$melbourne_offset = $timezone->local_offset($now);
 				$melbourne_date = $timezone->local_time($now);
 			}
-			my $test_date = POSIX::strftime('%Y/%m/%d %H:%M:%S', $timezone->local_time($now));
+			my $test_date = POSIX::strftime('%Y/%m/%d %H:%M:%S', $timezone->local_time($now)) . q[ ] . $timezone->abbr($now);
 			ok($test_date eq $correct_date, "Matched $test_date to $correct_date for $area/$location");
 			my @local_time = $timezone->local_time($now);
 			my $revert_time = $timezone->time_local(@local_time);
@@ -275,12 +275,12 @@ sub get_external_date {
 		}
 		$formatted_date = $local_time->{wYear} . q[/] . $local_time->{wMonth} . q[/] . $local_time->{wDay} . q[ ] . $local_time->{wHour} . q[:] . $local_time->{wMinute} . q[:] . $local_time->{wSecond};
 	} elsif ($perl_date) {
-		$formatted_date = `TZ="$area/$location" perl -MPOSIX -e 'print POSIX::strftime(q[%Y/%m/%d %H:%M:%S], localtime($untainted_unix_time))'`;
+		$formatted_date = `TZ="$area/$location" perl -MPOSIX -e 'print POSIX::strftime(q[%Y/%m/%d %H:%M:%S %Z], localtime($untainted_unix_time))'`;
 	} elsif ($bsd_date) {
-		$formatted_date = `TZ="$area/$location" date -r $untainted_unix_time +"%Y/%m/%d %H:%M:%S"`;
+		$formatted_date = `TZ="$area/$location" date -r $untainted_unix_time +"%Y/%m/%d %H:%M:%S %Z"`;
 	} else {
 		my $gm_strftime = POSIX::strftime("%Y/%m/%d %H:%M:%S GMT", gmtime $untainted_unix_time);
-		$formatted_date = `TZ="$area/$location" date -d "$gm_strftime" +"%Y/%m/%d %H:%M:%S"`;
+		$formatted_date = `TZ="$area/$location" date -d "$gm_strftime" +"%Y/%m/%d %H:%M:%S %Z"`;
 	}
 	if ($? != 0) {
 		diag("external date command exited with a $? for $area/$location at " . POSIX::strftime("%Y/%m/%d %H:%M:%S GMT", gmtime $untainted_unix_time));
