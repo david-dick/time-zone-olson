@@ -111,7 +111,7 @@ foreach my $area ($timezone->areas()) {
 			} else {
 				eval { gmtime $transition_time } or do { next };
 				my $correct_date = get_external_date($area, $location, $transition_time);
-				my $test_date = POSIX::strftime("%Y/%m/%d %H:%M:%S", $timezone->local_time($transition_time)) . q[ ] . $timezone->abbr($transition_time);
+				my $test_date = POSIX::strftime("%Y/%m/%d %H:%M:%S", $timezone->local_time($transition_time)) . q[ ] . $timezone->local_abbr($transition_time);
 				SKIP: {
 					if ($correct_date) {
 						ok($test_date eq $correct_date, "Matched $test_date to $correct_date for $area/$location for \$timezone->local_time($transition_time)");
@@ -160,7 +160,7 @@ foreach my $area ($timezone->areas()) {
 				}
 				$transition_time -= 1;
 				$correct_date = get_external_date($area, $location, $transition_time);
-				$test_date = POSIX::strftime("%Y/%m/%d %H:%M:%S", $timezone->local_time($transition_time)) . q[ ] . $timezone->abbr($transition_time);
+				$test_date = POSIX::strftime("%Y/%m/%d %H:%M:%S", $timezone->local_time($transition_time)) . q[ ] . $timezone->local_abbr($transition_time);
 				SKIP: {
 					if ($correct_date) {
 						ok($test_date eq $correct_date, "Matched $test_date to $correct_date for $area/$location for \$timezone->local_time - 1");
@@ -210,7 +210,7 @@ foreach my $area ($timezone->areas()) {
 
 				$transition_time += 2;
 				$correct_date = get_external_date($area, $location, $transition_time);
-				$test_date = POSIX::strftime("%Y/%m/%d %H:%M:%S", $timezone->local_time($transition_time)) . q[ ] . $timezone->abbr($transition_time);
+				$test_date = POSIX::strftime("%Y/%m/%d %H:%M:%S", $timezone->local_time($transition_time)) . q[ ] . $timezone->local_abbr($transition_time);
 				SKIP: {
 					if ($correct_date) {
 						ok($test_date eq $correct_date, "Matched $test_date to $correct_date for $area/$location for \$timezone->local_time + 1");
