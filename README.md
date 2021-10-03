@@ -76,7 +76,7 @@ This method will return the location component of the current time zone, such as
 
 This method takes the same arguments as `localtime` but returns the appropriate offset from GMT in minutes.  This can to used as a `offset` parameter to a subsequent call to Time::Zone::Olson.
 
-## abbr
+## local\_abbr
 
 This method takes the same arguments as `localtime` but returns the appropriate abbreviation for the timezone such as AEST or AEDT.  This is the same result as from a `date +%Z` command.
 

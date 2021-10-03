@@ -135,7 +135,7 @@ DATE: {
 				$melbourne_offset = $timezone->local_offset($now);
 				$melbourne_date = $timezone->local_time($now);
 			}
-			my $test_date = POSIX::strftime('%Y/%m/%d %H:%M:%S', $timezone->local_time($now)) . q[ ] . $timezone->abbr($now);
+			my $test_date = POSIX::strftime('%Y/%m/%d %H:%M:%S', $timezone->local_time($now)) . q[ ] . $timezone->local_abbr($now);
 			ok($test_date eq $correct_date, "Matched $test_date to $correct_date for $area/$location");
 			my @local_time = $timezone->local_time($now);
 			my $revert_time = $timezone->time_local(@local_time);

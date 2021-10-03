@@ -2285,7 +2285,7 @@ sub local_time {
     }
 }
 
-sub abbr {
+sub local_abbr {
     my ( $self, $time ) = @_;
     if ( !defined $time ) {
         $time = time;
@@ -3338,7 +3338,7 @@ This method will return the location component of the current time zone, such as
 
 This method takes the same arguments as C<localtime> but returns the appropriate offset from GMT in minutes.  This can to used as a C<offset> parameter to a subsequent call to Time::Zone::Olson.
 
-=head2 abbr
+=head2 local_abbr
 
 This method takes the same arguments as C<localtime> but returns the appropriate abbreviation for the timezone such as AEST or AEDT.  This is the same result as from a C<date +%Z> command.
 
