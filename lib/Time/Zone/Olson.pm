@@ -20,7 +20,7 @@ BEGIN {
     }
 }
 
-our $VERSION = '0.41';
+our $VERSION = '0.42';
 
 sub _SIZE_OF_TZ_HEADER                     { return 44 }
 sub _SIZE_OF_TRANSITION_TIME_V1            { return 4 }
@@ -3278,7 +3278,7 @@ Time::Zone::Olson - Provides an Olson timezone database interface
 
 =head1 VERSION
 
-Version 0.41
+Version 0.42
 
 =cut
 
