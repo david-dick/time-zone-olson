@@ -26,8 +26,10 @@ if ($timezone->location()) {
 }
 if (defined $ENV{TZ}) {
 	diag("Determined timezone is $ENV{TZ}");
-} else {
+} elsif (defined $timezone->timezone()) {
 	diag("Timezone did not parse into area/location:" . $timezone->timezone());
+} else {
+	diag("Timezone could not be determined");
 }
 if (defined $ENV{TZDIR}) {
 	diag("TZDIR has been set to $ENV{TZDIR}");
@@ -77,8 +79,10 @@ diag("Local timezone has been determined to be " . $timezone->timezone() );
 ok($timezone->timezone() =~ /^\w+(?:\/[\w\-\/]+)?$/, "\$timezone->timezone() parses correctly");
 if ($timezone->location()) {
 	ok($timezone->area() . '/' . $timezone->location() eq $timezone->timezone(), "\$timezone->area() and \$timezone->location() contain the area and location of the current timezone");
-} else {
+} elsif (defined $timezone->area()) {
 	ok($timezone->area() eq $timezone->timezone(), "\$timezone->area() and \$timezone->location() contain the area and location of the current timezone");
+} elsif (defined $timezone->area()) {
+	diag("Local timezone does not have an area");
 }
 ok((grep /^Australia$/, $timezone->areas()), "Found 'Australia' in \$timezone->areas()");
 ok((grep /^Melbourne$/, $timezone->locations('Australia')), "Found 'Melbourne' in \$timezone->areas('Australia')");
