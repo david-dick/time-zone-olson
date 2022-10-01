@@ -705,7 +705,8 @@ sub _tz_definition_equiv {
     my ( $self, $compare ) = @_;
     my $current_time_zone = $self->timezone();
     my $compare_time_zone = $compare->timezone();
-    if ( ( defined $self->{_tzdata}->{$current_time_zone}->{tz_definition} )
+    if (
+        ( defined $self->{_tzdata}->{$current_time_zone}->{tz_definition} )
         && (
             defined $compare->{_tzdata}->{$compare_time_zone}->{tz_definition} )
       )
@@ -1275,8 +1276,11 @@ sub _guess_win32_tz {
 }
 
 sub _guess_old_win32_tz {
-    my ( $self, $current_timezone_registry_path,
-        $current_timezone_registry_key ) = @_;
+    my (
+        $self,
+        $current_timezone_registry_path,
+        $current_timezone_registry_key
+    ) = @_;
     my $win32_timezone_name;
 
     Win32API::Registry::RegQueryValueExW(
@@ -3091,8 +3095,9 @@ sub _unpack_win32_tzi_structure {
                 dst_minutes => (
                     (
                         ( $bias + $daylight_bias ) < 0
-                        ? $minutes_in_one_hour -
-                          ( ( $bias + $daylight_bias ) % $minutes_in_one_hour )
+                        ? $minutes_in_one_hour - (
+                            ( $bias + $daylight_bias ) % $minutes_in_one_hour
+                          )
                         : ( $bias + $daylight_bias ) % $minutes_in_one_hour
                     ) % $minutes_in_one_hour
                 ),
