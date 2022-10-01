@@ -1046,6 +1046,15 @@ sub _guess_olson_tz {
             $self->{determining_path} = $path;
             return $guessed;
         }
+        elsif (
+            $readlink =~ m{(
+                               UTC
+                               )}smx
+          )
+        {
+            return $1;
+
+        }
     }
     elsif (
         ( $EXTENDED_OS_ERROR == POSIX::EINVAL() )
