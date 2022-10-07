@@ -32,12 +32,17 @@ jobs:
       run: |
         cpanm -v
         cpanm --installdeps .
+        cpanm Test::CheckManifest
 
     - name: Run tests
-      env:
-        RELEASE_TESTING: 1
+      # RELEASE_TESTING is not enabled as some of the tests take way too long (more than 30 minutes)
       run: |
         perl Makefile.PL
         make
         make test
 
+    - name: Run release tests
+      env:
+        RELEASE_TESTING: 1
+      run: |
+        prove t/manifest.t
