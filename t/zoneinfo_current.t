@@ -6,6 +6,7 @@ use Test::More;
 use Time::Zone::Olson();
 use POSIX();
 use English qw( -no_match_vars );
+use Encode();
 
 if ($^O eq 'MSWin32') {
 } else {
@@ -140,7 +141,7 @@ DATE: {
 				$melbourne_date = $timezone->local_time($now);
 			}
 			my $test_date = POSIX::strftime('%Y/%m/%d %H:%M:%S', $timezone->local_time($now)) . q[ ] . $timezone->local_abbr($now);
-			ok($test_date eq $correct_date, "Matched $test_date to $correct_date for $area/$location");
+			ok($test_date eq $correct_date, Encode::encode("UTF-8", "Matched $test_date to $correct_date for $area/$location", 1));
 			my @local_time = $timezone->local_time($now);
 			my $revert_time = $timezone->time_local(@local_time);
 			ok($revert_time <= $now, "\$timezone->time_local(\$timezone->local_time(\$now)) <= \$now where $revert_time = $now with a difference of " . ($revert_time - $now) . " for $area/$location"); 
@@ -277,7 +278,23 @@ sub get_external_date {
 		foreach my $key (sort {$a cmp $b } keys %{$local_time}) {
 			$local_time->{$key} =~ s/^(\d)$/0$1/smx;
 		}
-		$formatted_date = $local_time->{wYear} . q[/] . $local_time->{wMonth} . q[/] . $local_time->{wDay} . q[ ] . $local_time->{wHour} . q[:] . $local_time->{wMinute} . q[:] . $local_time->{wSecond};
+		$tzi->{StandardName} =~ s/\0$//smx;
+		$tzi->{DaylightName} =~ s/\0$//smx;
+		my $gmtime_seconds = 3600 * $gmt_time->{wHour} + 60 * $gmt_time->{wMinute} + $gmt_time->{wSecond};
+		my $localtime_seconds = 3600 * $local_time->{wHour} + 60 * $local_time->{wMinute} + $local_time->{wSecond};
+		my $test_bias = 60 * ($tzi->{Bias} + $tzi->{StandardBias});
+		$gmtime_seconds -= $test_bias;
+		if ($gmtime_seconds < 0) {
+			$gmtime_seconds += (24 * 3600);
+		}
+		my $abbr;
+		if ($gmtime_seconds == $localtime_seconds) {
+			$abbr = $tzi->{StandardName};
+		} else {
+			$abbr = $tzi->{DaylightName};
+		}
+
+		$formatted_date = $local_time->{wYear} . q[/] . $local_time->{wMonth} . q[/] . $local_time->{wDay} . q[ ] . $local_time->{wHour} . q[:] . $local_time->{wMinute} . q[:] . $local_time->{wSecond} . q[ ] . $abbr;
 	} elsif ($perl_date) {
 		$formatted_date = `TZ="$area/$location" perl -MPOSIX -e 'print POSIX::strftime(q[%Y/%m/%d %H:%M:%S %Z], localtime($untainted_unix_time))'`;
 	} elsif ($bsd_date) {
