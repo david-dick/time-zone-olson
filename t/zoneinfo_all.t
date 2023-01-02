@@ -62,12 +62,14 @@ if ($^O eq 'MSWin32') {
 }
 
 ok($timezone->timezone() =~ /^\w+(\/[\w\-\/+]+)?$/, "\$timezone->timezone() parses correctly");
-ok((grep /^Australia$/, $timezone->areas()), "Found 'Australia' in \$timezone->areas()");
-ok((grep /^Melbourne$/, $timezone->locations('Australia')), "Found 'Melbourne' in \$timezone->areas('Australia')");
-if (!$timezone->win32_registry()) {
-my $comment = $timezone->comment('Australia/Melbourne');
-ok($comment =~ /Victoria/smx, "\$timezone->comment('Australia/Melbourne') contains /Victoria/");
-diag("Comment for 'Australia/Melbourne' is '$comment'");
+if ($timezone->areas()) {
+	ok((grep /^Australia$/, $timezone->areas()), "Found 'Australia' in \$timezone->areas()");
+	ok((grep /^Melbourne$/, $timezone->locations('Australia')), "Found 'Melbourne' in \$timezone->areas('Australia')");
+	if (!$timezone->win32_registry()) {
+		my $comment = $timezone->comment('Australia/Melbourne');
+		ok($comment =~ /Victoria/smx, "\$timezone->comment('Australia/Melbourne') contains /Victoria/");
+		diag("Comment for 'Australia/Melbourne' is '$comment'");
+	}
 }
 my $tz = $timezone->timezone();
 my $directory = $timezone->directory();

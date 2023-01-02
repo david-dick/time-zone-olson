@@ -107,11 +107,12 @@ my $_default_zoneinfo_directory = '/usr/share/zoneinfo';
 if ( -e $_default_zoneinfo_directory ) {
 }
 else {
-    if ( -e '/usr/lib/zoneinfo' ) {
-        $_default_zoneinfo_directory = '/usr/lib/zoneinfo';
-    }
-    elsif ( -e '/usr/share/lib/zoneinfo' ) {    # solaris
-        $_default_zoneinfo_directory = '/usr/share/lib/zoneinfo';
+    my @alternative_directories =
+      qw(/usr/lib/zoneinfo /usr/share/lib/zoneinfo /etc/zoneinfo);
+    foreach my $alternative_directory (@alternative_directories) {
+        if ( -e $alternative_directory ) {
+            $_default_zoneinfo_directory = $alternative_directory;
+        }
     }
 }
 my $_zonetab_cache = {};
@@ -798,6 +799,9 @@ sub _unix_timezones {
         }
     }
     delete $self->{_unix_zonetab_path};
+    if ( -e File::Spec->catfile( $self->directory(), 'UTC' ) ) {
+        return ();
+    }
     Carp::croak("Failed to open $last_path for reading:$EXTENDED_OS_ERROR");
 }
 
@@ -979,6 +983,14 @@ sub timezone {
                 }
                 my $path =
                   File::Spec->catfile( $self->directory(), @directories );
+                if ( ( !-f $path ) && ( $new =~ /^Etc\/(GMT[-]0)$/smx ) )
+                {  # coping with test suite working with busybox on alpine linux
+                    my $alternative_path =
+                      File::Spec->catfile( $self->directory(), 'UTC' );
+                    if ( -f $alternative_path ) {
+                        $path = $alternative_path;
+                    }
+                }
                 if ( !-f $path ) {
                     Carp::croak(
 "'$new' is not a time zone in the existing Olson database"
