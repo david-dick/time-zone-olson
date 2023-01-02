@@ -37,6 +37,7 @@ if (defined $timezone->determining_path()) {
 
 my $perl_date = 0;
 my $bsd_date = 0;
+my $busybox_date = 0;
 if ($^O eq 'MSWin32') {
 	diag "$^O means we need to use the SystemTimeToTzSpecificLocalTime system call as the definitive source of truth for timezone calculations";
 } elsif ($^O eq 'solaris') {
@@ -44,19 +45,22 @@ if ($^O eq 'MSWin32') {
 	$perl_date = 1;
 } else {
 	my $test_gnu_date = `TZ="Australia/Melbourne" date -d "2015/02/28 11:00:00" +"%Y/%m/%d %H:%M:%S" 2>&1`;
-	if (defined $test_gnu_date) {
-		chomp $test_gnu_date;
-	}
+	chomp $test_gnu_date;
 	if (($test_gnu_date) && ($test_gnu_date eq '2015/02/28 11:00:00')) {
 	} else {
 		my $test_bsd_date = `TZ="Australia/Melbourne" date -r 1425081600 +"%Y/%m/%d %H:%M:%S" 2>&1`;
-		if (defined $test_bsd_date) {
-			chomp $test_bsd_date;
-		}
+		chomp $test_bsd_date;
 		if (($test_bsd_date) && ($test_bsd_date eq '2015/02/28 11:00:00')) {
 			$bsd_date = 1;
 		} else {
-			$perl_date = 1;
+			my $test_busybox_date = `TZ="Australia/Melbourne" date -d "2015-02-28 11:00:00" 2>&1`;
+			chomp $test_busybox_date;
+			diag "Output of busybox date command:$test_busybox_date";
+			if (($test_bsd_date) && ($test_bsd_date eq '2015/02/28 11:00:00')) {
+				$busybox_date = 1;
+			} else {
+				$perl_date = 1;
+			}
 		}
 	}
 }
@@ -91,6 +95,8 @@ my $todo;
 if ($^O eq 'MSWin32') {
 } elsif ($bsd_date) {
 	diag("bsd test of early date:" . `TZ="Australia/Melbourne" date -r "-2172355201" +"%Y/%m/%d %H:%M:%S %Z" 2>&1`);
+} elsif ($busybox_date) {
+	diag("busybox test of early date:" . `TZ="Australia/Melbourne" date -d "1901-02-28 23:59:59 GMT" 2>&1`);
 } elsif ($perl_date) {
 	$todo = "perl does not always agree with date(1)";
 } else {
@@ -388,6 +394,9 @@ sub get_external_date {
 		$formatted_date = `TZ="$area/$location" perl -MPOSIX -e 'print POSIX::strftime("%Y/%m/%d %H:%M:%S %Z", localtime($untainted_unix_time))'`;
 	} elsif ($bsd_date) {
 		$formatted_date = `TZ="$area/$location" date -r $untainted_unix_time +"%Y/%m/%d %H:%M:%S %Z"`;
+	} elsif ($busybox_date) {
+		my $gm_strftime = POSIX::strftime("%Y-%m-%d %H:%M:%S GMT", gmtime $untainted_unix_time);
+		$formatted_date = `TZ="$area/$location" date -d "$gm_strftime"`;
 	} else {
 		my $gm_strftime = POSIX::strftime("%Y/%m/%d %H:%M:%S GMT", gmtime $untainted_unix_time);
 		$formatted_date = `TZ="$area/$location" date -d "$gm_strftime" +"%Y/%m/%d %H:%M:%S %Z"`;
