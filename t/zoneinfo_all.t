@@ -12,6 +12,9 @@ use Time::Local();
 
 $ENV{PATH} = '/bin:/usr/bin:/usr/sbin:/sbin';
 delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+if ($^O eq 'cygwin') {
+	delete $ENV{PATH};
+}
 
 if ($ENV{TZ}) {
 	diag("TZ environment variable is $ENV{TZ}");

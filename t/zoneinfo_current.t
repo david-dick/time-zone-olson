@@ -9,6 +9,8 @@ use English qw( -no_match_vars );
 use Encode();
 
 if ($^O eq 'MSWin32') {
+} elsif ($^O eq 'cygwin') {
+	delete $ENV{PATH};
 } else {
 	$ENV{PATH} = '/bin:/usr/bin';
 }
