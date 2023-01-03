@@ -134,6 +134,7 @@ if (!$matched) {
 	my $directory = $timezone->directory();
 	diag("Permissions of $directory/$current_timezone is " . `ls -la $directory/$current_timezone`);
 	diag("Content of $directory/$current_timezone is " . `cat $directory/$current_timezone | base64`);
+	diag("Content of /etc/localtime is " . `cat /etc/localtime | base64`);
 }
 
 my $melbourne_offset;
