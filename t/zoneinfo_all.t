@@ -72,7 +72,7 @@ if ($^O eq 'MSWin32') {
 }
 
 ok($timezone->timezone() =~ /^\w+(\/[\w\-\/+]+)?$/, "\$timezone->timezone() parses correctly");
-if ($timezone->areas()) {
+if (($timezone->areas()) && ((scalar $timezone->areas()) > 1)) {
 	ok((grep /^Australia$/, $timezone->areas()), "Found 'Australia' in \$timezone->areas()");
 	ok((grep /^Melbourne$/, $timezone->locations('Australia')), "Found 'Melbourne' in \$timezone->areas('Australia')");
 	if (!$timezone->win32_registry()) {
