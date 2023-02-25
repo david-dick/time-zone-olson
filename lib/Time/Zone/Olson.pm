@@ -210,6 +210,7 @@ my %olson_to_win32_timezones = (
     'America/Chicago'                => ['Central Standard Time'],
     'America/Chihuahua'              =>
       [ 'Mexico Standard Time 2', 'Mountain Standard Time (Mexico)' ],
+    'America/Ciudad_Juarez'       => ['Mountain Standard Time'],
     'America/Coral_Harbour'       => ['SA Pacific Standard Time'],
     'America/Cordoba'             => ['Argentina Standard Time'],
     'America/Costa_Rica'          => ['Central America Standard Time'],
