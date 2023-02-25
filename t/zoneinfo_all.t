@@ -25,7 +25,8 @@ ok($timezone, "Time::Zone::Olson->new() generates an object");
 if ($timezone->win32_registry()) {
 	diag("Olson tz directory is using the Win32 Registry for Olson tz calculations for $^O");
 } else {
-	diag("Olson tz directory is " . $timezone->directory() . " for $^O");
+	my $directory = $timezone->directory();
+	diag("Olson tz directory is $directory for $^O");
 }
 
 if (!$timezone->timezone()) {
@@ -35,7 +36,9 @@ if (!$timezone->timezone()) {
 diag("Local timezone has been determined to be " . $timezone->timezone() );
 ok($timezone->timezone(), "Local timezone has been determined to be " . $timezone->timezone() );
 if (defined $timezone->determining_path()) {
-	diag("Local timezone was determined using " . $timezone->determining_path() );
+	my $determining_path = $timezone->determining_path();
+	diag("Local timezone was determined using " . $determining_path );
+	diag(`ls -la $determining_path`);
 }
 
 my $perl_date = 0;
