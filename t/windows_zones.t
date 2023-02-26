@@ -4,11 +4,11 @@ use strict;
 use warnings;
 use File::Temp();
 use Fcntl();
-use XML::LibXML();
 use Test::More;
 use Time::Zone::Olson();
 use LWP::UserAgent();
 use HTTP::Request();
+use JSON();
 use Encode();
 use English qw( -no_match_vars );
 
@@ -17,7 +17,7 @@ $ua->env_proxy();
 $ua->timeout(10);
 $ua->agent('CPAN Testing https://metacpan.org/pod/Time::Zone::Olson ');
 
-my $url = 'https://raw.githubusercontent.com/unicode-org/cldr/master/common/supplemental/windowsZones.xml';
+my $url = 'https://raw.githubusercontent.com/unicode-org/cldr-json/main/cldr-json/cldr-core/supplemental/windowsZones.json';
 diag("Checking $url");
 my $request = HTTP::Request->new(GET => $url);
 ok(1, "Initialised test");
@@ -28,24 +28,11 @@ eval {
 };
 my $windows_handle;
 if (defined $response && $response->is_success()) {
-	$windows_handle = File::Temp::tempfile('cpan_tester_time_zone_olson_win32_XXXXXXXXXXX') or die "Failed to open temporary file for writing:$EXTENDED_OS_ERROR";
-	binmode $windows_handle;
-
-	my $content = Encode::decode('UTF-8', $response->decoded_content());
-	$content =~ s/[^[:ascii:]]//smxg;
-	$windows_handle->print($content);
-	seek $windows_handle, 0, Fcntl::SEEK_SET() or die "Failed to seek to start of temporary file:$!";
-
+	my $json = JSON->new()->decode($response->decoded_content());
 	my %olson_to_win32_mapping;
-	my $dom = XML::LibXML->load_xml(IO => $windows_handle);
-	my $supplementary_data = $dom->documentElement();
-	foreach my $windows_zone ( $supplementary_data->getChildrenByTagName('windowsZones') ) {
-		foreach my $map_time_zones( $windows_zone->getChildrenByTagName('mapTimezones') ) {
-			foreach my $map_zone ( $map_time_zones->getChildrenByTagName('mapZone') ) {
-				foreach my $name (split q[ ], $map_zone->getAttribute( 'type' )) {
-					$olson_to_win32_mapping{$name} = $map_zone->getAttribute('other');
-				}
-			}
+	foreach my $zone (@{$json->{supplemental}->{windowsZones}->{mapTimezones}}) {
+		foreach my $name (split /[ ]/smx, $zone->{mapZone}->{_type}) {
+			$olson_to_win32_mapping{$name} = $zone->{mapZone}->{_other};
 		}
 	}
 	my $todo;
