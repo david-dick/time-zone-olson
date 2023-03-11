@@ -3014,7 +3014,7 @@ sub _read_win32_tzfile {
 "Failed to read LOCAL_MACHINE\\$timezone_specific_registry_path\\Std:$EXTENDED_OS_ERROR"
       );
     $standard_name = $self->_win32_registry_decode($standard_name);
-    if ( $standard_name eq 'Co-ordinated Universal Time' ) {
+    if ( $standard_name =~ /^Co-?ordinated[ ]Universal[ ]Time$/smx ) {
         $standard_name = 'UTC';
     }
     Win32API::Registry::RegQueryValueExW( $timezone_specific_subkey,
