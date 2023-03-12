@@ -619,6 +619,12 @@ sub new {
             }
             else {
                 $env_tz = $ENV{TZ};
+                if ( $OSNAME eq 'MSWin32' ) {
+
+                # setting TZ in cmd.exe can append spaces at the end of variable
+                # eg TZ=Europe/London && perl -Ilib -wT t\\zoneinfo_all.t
+                    $env_tz =~ s/\s*$//smx;
+                }
                 if ( !$params{timezone} ) {
                     $self->{_determined_env} = 1;
                 }
