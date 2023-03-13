@@ -236,7 +236,7 @@ foreach my $area ($timezone->areas()) {
 					}
 				}
 
-				$transition_time += 1;
+				$transition_time += 2;
 				$correct_date = get_external_date($area, $location, $transition_time);
 				$test_date = POSIX::strftime("%Y/%m/%d %H:%M:%S", $timezone->local_time($transition_time)) . q[ ] . $timezone->local_abbr($transition_time);
 				SKIP: {
