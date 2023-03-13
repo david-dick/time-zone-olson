@@ -120,7 +120,7 @@ my $_tzdata_cache  = {};
 
 # source of olson => win32 timezones
 # used to be http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml
-# now is     https://raw.githubusercontent.com/unicode-org/cldr/master/common/supplemental/windowsZones.xml
+# now is     https://raw.githubusercontent.com/unicode-org/cldr-json/main/cldr-json/cldr-core/supplemental/windowsZones.json
 
 my %olson_to_win32_timezones = (
     'Africa/Abidjan'       => ['Greenwich Standard Time'],
