@@ -3151,13 +3151,16 @@ sub _unpack_win32_tzi_structure {
                         : ( $bias + $daylight_bias ) % $minutes_in_one_hour
                     ) % $minutes_in_one_hour
                 ),
-                start_month => $daylight_month,
-                end_month   => $standard_month,
-                start_week  => $daylight_day,
-                end_week    => $standard_day,
-                start_day   => $daylight_day_of_week,
-                end_day     => $standard_day_of_week,
-                end_hour    => $standard_hour
+                start_month  => $daylight_month,
+                end_month    => $standard_month,
+                start_week   => $daylight_day,
+                end_week     => $standard_day,
+                start_day    => $daylight_day_of_week,
+                end_day      => $standard_day_of_week,
+                start_hour   => $daylight_hour,
+                end_hour     => $standard_hour,
+                start_minute => $daylight_minute,
+                end_minute   => $standard_minute,
               )
             : ()
         ),
