@@ -44,7 +44,7 @@ my $perl_date = 0;
 my $bsd_date = 0;
 my $busybox_date = 0;
 if ($^O eq 'MSWin32') {
-	diag "$^O means we need to use the SystemTimeToTzSpecificLocalTime system call as the definitive source of truth for timezone calculations";
+	diag "$^O means we should use the pre-compiled Win32 date.exe binary in this distribution as the definitive source of truth for timezone calculations";
 } elsif ($^O eq 'solaris') {
 	diag "$^O does not have a useful date binary.";
 	$perl_date = 1;
