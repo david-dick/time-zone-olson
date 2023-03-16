@@ -3161,6 +3161,8 @@ sub _unpack_win32_tzi_structure {
                 end_hour     => $standard_hour,
                 start_minute => $daylight_minute,
                 end_minute   => $standard_minute,
+                start_second => $daylight_second,
+                end_second   => $standard_second,
               )
             : ()
         ),
