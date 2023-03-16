@@ -132,12 +132,14 @@ if (!$matched) {
 	diag("Seconds since UNIX epoch is:$now");
 	diag("Time::Zone::Olson produces:" . join ', ', @test_localtime);
 	diag("perl localtime produces   :" . join ', ', @correct_localtime);
-	diag(`ls -la /etc/localtime`);
-	my $current_timezone = $timezone->timezone();
-	my $directory = $timezone->directory();
-	diag("Permissions of $directory/$current_timezone is " . `ls -la $directory/$current_timezone`);
-	diag("Content of $directory/$current_timezone is " . `cat $directory/$current_timezone | base64`);
-	diag("Content of /etc/localtime is " . `cat /etc/localtime | base64`);
+	if ($^O ne 'MSWin32') {
+		diag(`ls -la /etc/localtime`);
+		my $current_timezone = $timezone->timezone();
+		my $directory = $timezone->directory();
+		diag("Permissions of $directory/$current_timezone is " . `ls -la $directory/$current_timezone`);
+		diag("Content of $directory/$current_timezone is " . `cat $directory/$current_timezone | base64`);
+		diag("Content of /etc/localtime is " . `cat /etc/localtime | base64`);
+	}
 }
 
 DST_TIME: {
