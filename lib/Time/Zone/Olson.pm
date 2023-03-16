@@ -3118,7 +3118,27 @@ sub _unpack_win32_tzi_structure {
     ) = unpack 'lllSSSSSSSSSSSSSS', $binary;
     my $negative_one        = _NEGATIVE_ONE();
     my $minutes_in_one_hour = _MINUTES_IN_ONE_HOUR();
-    my $tz_definition       = {
+    if ( $standard_second == _SECONDS_IN_ONE_MINUTE() - 1 ) {
+        if ( $standard_minute == _MINUTES_IN_ONE_HOUR() - 1 ) {
+            if ( $standard_hour == _HOURS_IN_ONE_DAY() - 1 ) {
+                $standard_hour += 1;
+                $standard_minute = 0;
+                $standard_second = 0;
+            }
+        }
+    }
+    if (   ( !defined $daylight_second )
+        || ( $daylight_second == _SECONDS_IN_ONE_MINUTE() - 1 ) )
+    {
+        if ( $daylight_minute == _MINUTES_IN_ONE_HOUR() - 1 ) {
+            if ( $daylight_hour == _HOURS_IN_ONE_DAY() - 1 ) {
+                $daylight_hour += 1;
+                $daylight_minute = 0;
+                $daylight_second = 0;
+            }
+        }
+    }
+    my $tz_definition = {
         ( ( $bias + $standard_bias ) < 0 ? ( std_sign => q[-] ) : () ),
         std_hours => int(
             ( $bias + $standard_bias ) /
