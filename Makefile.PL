@@ -58,6 +58,7 @@ WriteMakefile(
         'Test::More'  => 0,
         'Time::Local' => 0,
         'JSON'                 => 0,
+        'Net::HTTPS'           => 0,
         'LWP::UserAgent'       => 0,
         'LWP::Protocol::https' => 6.06,
         'HTTP::Request'        => 0,
