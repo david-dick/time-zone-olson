@@ -28,21 +28,32 @@ jobs:
       run: |
         perl -v
 
+    - name: Upgrade Perl toolchain
+      run: |
+        cpanm --notest --update App::cpanminus
+        cpanm --notest ExtUtils::MakeMaker
+
     - name: Install Modules
+      env:
+        AUTOMATED_TESTING: 1
       run: |
         cpanm -v
         cpanm --installdeps .
         cpanm Test::CheckManifest
 
-    - name: Run tests
+    - name: Run tests under gmake (on windows)
       # RELEASE_TESTING is not enabled as some of the tests take way too long (more than 30 minutes)
+      if: ${{ startsWith(matrix.runner, 'windows-') }}
+      run: |
+        perl Makefile.PL
+        gmake
+        gmake test
+
+    - name: Run tests under make (not windows)
+      # RELEASE_TESTING is not enabled as some of the tests take way too long (more than 30 minutes)
+      if: ${{ ! startsWith(matrix.runner, 'windows-') }}
       run: |
         perl Makefile.PL
         make
         make test
 
-    - name: Run release tests
-      env:
-        RELEASE_TESTING: 1
-      run: |
-        prove t/manifest.t
